@@ -20,9 +20,3 @@
     left: 6%;
     top: 7%;
 }
-
-.pawn{
-    grid-row: 1;
-    grid-column: 1;
-    border: 2px solid red;
-}
