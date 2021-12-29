@@ -4,9 +4,13 @@ import '../static/activity/css/ActivityTable.css'
 import tabla from '../static/activity/images/tabla.png'
 
 export default function ActivityTable(){
+    let getStateFromStorage = () => {
+        return [parseInt(localStorage.getItem('nrOfPlayers')),localStorage.getItem('positions')]
+    }
     const pawnColors = ['green','blue', 'red', 'purple'];
-    let pawnOnEachPosition = Array(50).fill(0)
-    let [nrOfPlayers, setNrOfPlayers] = useState(0);
+    let [ nrOfPlayersFromStorage, positionsFromStorage ] = getStateFromStorage();
+    let [nrOfPlayers, setNrOfPlayers] = useState(nrOfPlayersFromStorage);
+    let pawns = pawnColors.slice(0,nrOfPlayers).map((color)=><Pawn key={color} identifier={color}/>)
 
     let calculateCoordsFromPozition = (pozition) => {
         pozition = parseInt(pozition)
@@ -46,16 +50,40 @@ export default function ActivityTable(){
     }
 
     let setPawnPosition = (identifier,pozitie) => {
-        pawnOnEachPosition[getPawnPosition(identifier)]--;
-        pawnOnEachPosition[pozitie]++;
         let [x, y] = calculateCoordsFromPozition(pozitie);
         let pawn = document.getElementsByClassName(identifier)[0];
         pawn.style.gridColumn = `${y}`; 
         pawn.style.gridRow = `${x}`;
+        saveStateToStorage();
+    }
+
+    let saveStateToStorage = () => {
+        let positions = '';
+        pawns.map((pawn)=>{
+            let pawnHtml = document.getElementsByClassName(pawn.props.identifier)[0]
+            positions += `${pawn.props.identifier} ${ calculatePozitionFromCoords(pawnHtml.style.gridRow.split(" ")[0],pawnHtml.style.gridColumn.substring(0,1))},`
+        })
+
+        localStorage.setItem('nrOfPlayers',nrOfPlayers);
+        localStorage.setItem('positions', positions.substring(0,positions.length-1));
+    }
+
+    let setStateFromStorage = () =>{
+        let positions = positionsFromStorage.split(',') // ['blue 0','red 1','yellow 7']
+
+        for(let i=0;i<nrOfPlayers;++i){
+            for(let j=0;j<nrOfPlayers;++j){
+                if(pawns[i].props.identifier === positions[j].split(' ')[0]){
+                    setPawnPosition(pawns[i].props.identifier,parseInt(positions[j].split(' ')[1]))
+                }
+            }
+        }
     }
     
     useEffect(()=>{
-        while(true){
+        if(!isNaN(nrOfPlayers) && nrOfPlayers !== 0) setStateFromStorage();
+
+        while( isNaN(nrOfPlayers) || nrOfPlayers === 0){
             let aux= prompt('Numar de echipe')
             if( ['1','2','3','4'].includes(aux) ){
                 setNrOfPlayers(parseInt(aux));
@@ -64,19 +92,18 @@ export default function ActivityTable(){
         }
     },[])
 
-
     return(
         <div className='main-div'>
             <div className='container-div-board'>
                 <img src={tabla} alt='board-img' className="board-image"/>
                 <div className='board-div'>
-                   { pawnColors.slice(0,nrOfPlayers).map((color)=><Pawn key={color} identifier={color}/>) }
+                   { pawns }
                 </div>
             </div>
             <div className='d-flex flex-column' style={{margin: '15px'}}>
                 { pawnColors.slice(0,nrOfPlayers).map((color)=>
                     <div key={`${color}Form`} className='d-flex flex-row' style={{marginTop: '10px'}}>
-                        <h2>{color}</h2>
+                        <h2>{color.toUpperCase()}</h2>
                         <button onClick={()=>setPawnPosition(color,(getPawnPosition(color)+1))} className='btn btn-lg btn-success' style={{marginRight: '10px'}}>+1</button>
                         <button onClick={()=>setPawnPosition(color,(getPawnPosition(color)+3))} className='btn btn-lg btn-success' style={{marginRight: '10px'}}>+3</button>
                         <button onClick={()=>setPawnPosition(color,(getPawnPosition(color)+4))} className='btn btn-lg btn-success' style={{marginRight: '10px'}}>+4</button>
@@ -87,7 +114,11 @@ export default function ActivityTable(){
                         <button onClick={()=>setPawnPosition(color,(getPawnPosition(color)-5))} className='btn btn-lg btn-danger' style={{marginRight: '10px'}}>-5</button>
                     </div>
                 ) }
+                <button className='btn btn-dark btn-block' style={{marginTop: '10%'}}>CARDS</button>
+                <button onClick={()=>{localStorage.clear()
+                                      window.location.reload()}}  className='btn btn-warning btn-block' style={{marginTop: '10%'}}>RESET</button>
             </div>
+            
         </div>
     )
 }

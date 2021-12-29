@@ -7,12 +7,11 @@ import redPawnImage from '../static/activity/images/pioni/redPawn.png'
 
 export default function ActivityTable(props){
     let divStyle={
-        gridRow: `1`,
-        gridColumn: `5`,
+        gridRow: `1`, //init
+        gridColumn: `5`, //init
         maxWidth: '30%',
         maxHeight: '80%',
         position: 'relative',
-        left: '10%'
     }
     const imageStyle={
         width: '100%',
