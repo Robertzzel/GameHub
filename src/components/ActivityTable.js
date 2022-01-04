@@ -79,6 +79,13 @@ export default function ActivityTable(){
             }
         }
     }
+
+    let resetGame = () => {
+        if(prompt("Sure you want to reset the game?(Y/N) ").toLowerCase() === 'y'){
+            localStorage.clear()
+            window.location.reload()
+        }
+    }
     
     useEffect(()=>{
         if(!isNaN(nrOfPlayers) && nrOfPlayers !== 0) setStateFromStorage();
@@ -114,11 +121,9 @@ export default function ActivityTable(){
                         <button onClick={()=>setPawnPosition(color,(getPawnPosition(color)-5))} className='btn btn-lg btn-danger' style={{marginRight: '10px'}}>-5</button>
                     </div>
                 ) }
-                <button className='btn btn-dark btn-block' style={{marginTop: '10%'}}>CARDS</button>
-                <button onClick={()=>{localStorage.clear()
-                                      window.location.reload()}}  className='btn btn-warning btn-block' style={{marginTop: '10%'}}>RESET</button>
+                <a className='btn btn-info btn-block' href='/activity/cards' style={{marginTop: '10%'}}>CARDS</a>
+                <button onClick={resetGame}  className='btn btn-warning btn-block' style={{marginTop: '10%'}}>RESET</button>
             </div>
-            
         </div>
     )
 }
