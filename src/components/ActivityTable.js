@@ -109,7 +109,7 @@ export default function ActivityTable(){
             </div>
             <div className='d-flex flex-column' style={{margin: '15px'}}>
                 { pawnColors.slice(0,nrOfPlayers).map((color)=>
-                    <div key={`${color}Form`} className='d-flex flex-row' style={{marginTop: '10px'}}>
+                    <div key={`${color}Form`} className='d-flex flex-row' style={{marginTop: '10%'}}>
                         <h2>{color.toUpperCase()}</h2>
                         <button onClick={()=>setPawnPosition(color,(getPawnPosition(color)+1))} className='btn btn-lg btn-success' style={{marginRight: '10px'}}>+1</button>
                         <button onClick={()=>setPawnPosition(color,(getPawnPosition(color)+3))} className='btn btn-lg btn-success' style={{marginRight: '10px'}}>+3</button>
