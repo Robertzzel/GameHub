@@ -54,25 +54,25 @@ export default function CardsView(){
 
     let saveInMemory = (cardType,nrInSetOfCards,offsetX,offsetY) => {
         localStorage.setItem("card",`${cardType} ${nrInSetOfCards} ${offsetX} ${offsetY}`)
-        alert(localStorage.card)
+        //alert(localStorage.card)
     }
 
     let restoreFromMemory = () => {
         let cardFromMemory = localStorage.getItem("card")
         if(cardFromMemory !== null || cardFromMemory !== undefined){
 
-            alert(`restoring ${cardFromMemory.split(' ')}`)
-
             let cardSet = cards[parseInt(cardFromMemory.split(' ')[0])][parseInt(cardFromMemory.split(' ')[1])]
-            let offsetX = parseInt(cardFromMemory[`${cardFromMemory.split(' ')[2]}`])
-            let offsetY = parseInt(cardFromMemory[`${cardFromMemory.split(' ')[3]}`])
+            let offsetX = parseInt(cardFromMemory.split(' ')[2])
+            let offsetY = parseInt(cardFromMemory.split(' ')[3])
 
             let pickedCardImage = document.getElementsByClassName('pickedCard-div')[0];
             pickedCardImage.style.backgroundImage = `url(${cardSet})`;
             pickedCardImage.style.height = `${cardHeight}px`;
             pickedCardImage.style.width = `${cardWidth}px`;
-            pickedCardImage.style.backgroundPositionX = `${offsetX}px`;
-            pickedCardImage.style.backgroundPositionY = `${offsetY}px`;
+            
+            pickedCardImage.style.backgroundPosition = `-${offsetX}px -${offsetY}px`
+            pickedCardImage.style.backgroundPositionX = `-${offsetX}px`;
+            pickedCardImage.style.backgroundPositionY = `-${offsetY}px`;
         }
     }
 
@@ -95,16 +95,18 @@ export default function CardsView(){
 
         let cardSet = cards[`${cardType}`][`${nrInSetOfCards}`]
 
-        let offsetX = cardWidth * Math.floor(Math.random()*6);
-        let offsetY = cardHeight * Math.floor(Math.random()*6);
+        let offsetX = cardWidth * Math.floor(Math.random()*5);
+        let offsetY = cardHeight * Math.floor(Math.random()*5);
 
-        saveInMemory(cardType,nrInSetOfCards,offsetX,offsetY);
         let pickedCardImage = document.getElementsByClassName('pickedCard-div')[0];
         pickedCardImage.style.backgroundImage = `url(${cardSet})`;
         pickedCardImage.style.height = `${cardHeight}px`;
         pickedCardImage.style.width = `${cardWidth}px`;
-        pickedCardImage.style.backgroundPositionX = `${offsetX}px`;
-        pickedCardImage.style.backgroundPositionY = `${offsetY}px`;
+        pickedCardImage.style.backgroundPositionX = `-${offsetX}px`;
+        pickedCardImage.style.backgroundPositionY = `-${offsetY}px`;
+
+        alert(`before function ${[cardType,nrInSetOfCards,offsetX,offsetY]}`)
+        saveInMemory(cardType,nrInSetOfCards,offsetX,offsetY);
     }
 
     useEffect(()=>{
