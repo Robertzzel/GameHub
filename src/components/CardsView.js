@@ -54,7 +54,6 @@ export default function CardsView(){
 
     let saveInMemory = (cardType,nrInSetOfCards,offsetX,offsetY) => {
         localStorage.setItem("card",`${cardType} ${nrInSetOfCards} ${offsetX} ${offsetY}`)
-        //alert(localStorage.card)
     }
 
     let restoreFromMemory = () => {
@@ -105,7 +104,6 @@ export default function CardsView(){
         pickedCardImage.style.backgroundPositionX = `-${offsetX}px`;
         pickedCardImage.style.backgroundPositionY = `-${offsetY}px`;
 
-        alert(`before function ${[cardType,nrInSetOfCards,offsetX,offsetY]}`)
         saveInMemory(cardType,nrInSetOfCards,offsetX,offsetY);
     }
 
